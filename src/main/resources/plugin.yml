@@ -1,0 +1,10 @@
+main: com.rooxchicken.pmc.PMC
+name: PMC
+version: 0.1
+api-version: '1.21'
+
+commands:
+   command:
+      usage: /command
+      
+# depend: [ ProtocolLib ]
