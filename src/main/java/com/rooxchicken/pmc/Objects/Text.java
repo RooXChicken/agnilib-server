@@ -10,12 +10,14 @@ import org.bukkit.entity.Player;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.rooxchicken.pmc.PMC;
+import com.rooxchicken.pmc.Data.Parser;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 
 public class Text extends Component
 {
-    private static final byte beginID = 12;
-    private static final byte textID = 13;
-    private static final byte colorID = 14;
+    private static final short textID = 2;
 
     protected String text;
     protected Color color;
@@ -50,11 +52,12 @@ public class Text extends Component
     protected void _sendData(List<Player> _players)
     {
         super._sendData(_players);
+        ByteBuf _buf = Unpooled.buffer();
         for(Player _player : _players)
         {
-            PMC.sendData(_player, beginID, id);
-            PMC.sendData(_player, textID, text);
-            PMC.sendData(_player, colorID, color.asARGB() + "");
+            
+            // _buf.writeInt(textID)
+            // PMC.sendData(_player, Parser.parseData(textID, id, text, color.asARGB() + ""));
         }
     }
 

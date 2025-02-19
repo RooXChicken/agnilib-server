@@ -82,14 +82,6 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(PMC.self, PMC.CHANNEL);
     }
 
-    // public static ByteArrayDataOutput generateDataOutput(String _id)
-    // {
-    //     ByteArrayDataOutput _out = ByteStreams.newDataOutput();
-
-    //     _out.writeUTF(_id);
-    //     return _out;
-    // }
-
     private static boolean checkPlayer(Player _player)
     {
         if(_player == null || !_player.isValid())
@@ -101,12 +93,12 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
         return true;
     }
 
-    public static void sendData(Player _player, byte _id, String _data)
+    public static void sendData(Player _player, byte[] _data)
     {
         if(!checkPlayer(_player))
             return;
 
-        _player.sendPluginMessage(self, CHANNEL, Parser.parseString(_id, _data));
+        _player.sendPluginMessage(self, CHANNEL, _data);
     }
 
     @Override
@@ -115,7 +107,5 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
         Bukkit.getLogger().info("Received data from: " + _channel);
         if(!_channel.equals(CHANNEL))
             return;
-
-        
     }
 }

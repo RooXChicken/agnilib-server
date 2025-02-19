@@ -10,14 +10,13 @@ import org.bukkit.entity.Player;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.rooxchicken.pmc.PMC;
+import com.rooxchicken.pmc.Data.Parser;
+
+import net.minecraft.network.VarInt;
 
 public abstract class Component extends Payload
 {
-    private static final byte beginID = 7;
-    private static final byte posXID = 8;
-    private static final byte posYID = 9;
-    private static final byte scaleXID = 10;
-    private static final byte scaleYID = 11;
+    private static final short componentID = 1;
 
     protected double posX = 0;
     protected double posY = 0;
@@ -47,18 +46,21 @@ public abstract class Component extends Payload
         checkAndSend(_players);
     }
 
+    public void setScale(double _scaleX, double _scaleY, @Nullable List<Player> _players)
+    {
+        if(_scaleX == scaleX && _scaleY == scaleY)
+            return;
+
+        scaleX = _scaleX;
+        scaleY = _scaleY;
+        
+        checkAndSend(_players);
+    }
+
     @Override
     protected void _sendData(List<Player> _players)
     {
         for(Player _player : _players)
-        {
-            PMC.sendData(_player, beginID, id);
-            
-            PMC.sendData(_player, posXID, posX + "");
-            PMC.sendData(_player, posYID, posY + "");
-            
-            PMC.sendData(_player, scaleXID, scaleX + "");
-            PMC.sendData(_player, scaleYID, scaleY + "");
-        }
+            PMC.sendData(_player, Parser.parseData(componentID, id, posX + "", posY + "", scaleX + "", scaleY + ""));
     }
 }
