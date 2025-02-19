@@ -1,5 +1,6 @@
 package com.rooxchicken.pmc.Objects;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +10,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.rooxchicken.pmc.PMC;
 import com.rooxchicken.pmc.Data.Parser;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minecraft.network.VarInt;
 
-public abstract class Component extends Payload
+public class Component extends Payload
 {
     private static final short componentID = 1;
 
@@ -60,7 +64,22 @@ public abstract class Component extends Payload
     @Override
     protected void _sendData(List<Player> _players)
     {
+        ByteBuf _buf = Unpooled.buffer();
+        _buf.writeShort(componentID);
+
+        Parser.writeString(id, _buf);
+        _buf.writeDouble(posX);
+        _buf.writeDouble(posY);
+        _buf.writeDouble(scaleX);
+        _buf.writeDouble(scaleY);
+
         for(Player _player : _players)
-            PMC.sendData(_player, Parser.parseData(componentID, id, posX + "", posY + "", scaleX + "", scaleY + ""));
+            PMC.sendData(_player, _buf.array());
+    }
+
+    @Override
+    public void destroy(List<Player> _players)
+    {
+
     }
 }

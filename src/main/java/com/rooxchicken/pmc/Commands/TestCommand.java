@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.rooxchicken.pmc.PMC;
+import com.rooxchicken.pmc.Tasks.TestTask;
 
 public class TestCommand implements CommandExecutor
 {
@@ -20,10 +21,11 @@ public class TestCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if(sender.isOp())
-        {
-            Player player = Bukkit.getPlayer(sender.getName());
-        }
+        PMC.tasks.add(new TestTask(plugin));
+        // if(sender.isOp())
+        // {
+        //     Player player = Bukkit.getPlayer(sender.getName());
+        // }
 
         return true;
     }

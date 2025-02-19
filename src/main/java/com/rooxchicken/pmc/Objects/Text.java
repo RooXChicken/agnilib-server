@@ -1,5 +1,6 @@
 package com.rooxchicken.pmc.Objects;
 
+import java.nio.charset.Charset;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -51,14 +52,17 @@ public class Text extends Component
     @Override
     protected void _sendData(List<Player> _players)
     {
-        super._sendData(_players);
         ByteBuf _buf = Unpooled.buffer();
+        _buf.writeShort(textID);
+
+        Parser.writeString(id, _buf);
+        Parser.writeString(text, _buf);
+        _buf.writeInt(color.asARGB());
+
         for(Player _player : _players)
-        {
-            
-            // _buf.writeInt(textID)
-            // PMC.sendData(_player, Parser.parseData(textID, id, text, color.asARGB() + ""));
-        }
+            PMC.sendData(_player, _buf.array());
+
+        super._sendData(_players);
     }
 
     @Override

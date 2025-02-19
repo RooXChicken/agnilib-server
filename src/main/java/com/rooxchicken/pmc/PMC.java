@@ -20,6 +20,10 @@ import com.rooxchicken.pmc.Objects.Text;
 import com.rooxchicken.pmc.Tasks.Task;
 import com.rooxchicken.pmc.Tasks.TestTask;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import net.minecraft.network.VarInt;
+
 public class PMC extends JavaPlugin implements Listener, PluginMessageListener
 {
     public static PMC self;
@@ -34,7 +38,7 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
         initializeDataConnection();
 
         tasks = new ArrayList<Task>();
-        tasks.add(new TestTask(this));
+        // tasks.add(new TestTask(this));
 
         this.getCommand("command").setExecutor(new TestCommand(this));
 
@@ -97,8 +101,19 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
     {
         if(!checkPlayer(_player))
             return;
+        
+        ByteBuf _buf = Unpooled.buffer(0);
+        VarInt.write(_buf, _data.length);
 
-        _player.sendPluginMessage(self, CHANNEL, _data);
+        byte[] _lengthData = new byte[_buf.readableBytes()];
+        for(int i = 0; i < _lengthData.length; i++)
+            _lengthData[i] = _buf.readByte();
+
+        ByteArrayDataOutput _out = ByteStreams.newDataOutput();
+        _out.write(_lengthData);
+        _out.write(_data);
+            
+        _player.sendPluginMessage(self, CHANNEL, _out.toByteArray());
     }
 
     @Override
