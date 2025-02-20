@@ -1,11 +1,17 @@
 package com.rooxchicken.pmc;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -15,8 +21,10 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.rooxchicken.pmc.Commands.TestCommand;
 import com.rooxchicken.pmc.Data.Parser;
+import com.rooxchicken.pmc.Objects.Image;
 import com.rooxchicken.pmc.Objects.Payload;
 import com.rooxchicken.pmc.Objects.Text;
+import com.rooxchicken.pmc.Tasks.PreloadImages;
 import com.rooxchicken.pmc.Tasks.Task;
 import com.rooxchicken.pmc.Tasks.TestTask;
 
@@ -27,8 +35,10 @@ import net.minecraft.network.VarInt;
 public class PMC extends JavaPlugin implements Listener, PluginMessageListener
 {
     public static PMC self;
-    public static final String CHANNEL = "pmc:channel";
     public static ArrayList<Task> tasks;
+
+    public static final String CHANNEL = "pmc:channel";
+    public static final short loginID = 0;
 
     @Override
     public void onEnable()
@@ -38,7 +48,10 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
         initializeDataConnection();
 
         tasks = new ArrayList<Task>();
-        tasks.add(new TestTask(this));
+        // tasks.add(new TestTask(this));
+
+        for(int i = 1; i < 531; i++)
+            Image.preload("video_" + i, new File("frames/" + i + ".png"));
 
         this.getCommand("command").setExecutor(new TestCommand(this));
 
@@ -84,6 +97,7 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
     public static void initializeDataConnection()
     {
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(PMC.self, PMC.CHANNEL);
+        Bukkit.getServer().getMessenger().registerIncomingPluginChannel(PMC.self, PMC.CHANNEL, PMC.self);
     }
 
     private static boolean checkPlayer(Player _player)
@@ -119,8 +133,12 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
     @Override
     public void onPluginMessageReceived(String _channel, Player _player, byte[] _data)
     {
-        Bukkit.getLogger().info("Received data from: " + _channel);
         if(!_channel.equals(CHANNEL))
             return;
+        
+        ByteBuf _buf = Unpooled.copiedBuffer(_data);
+        short _status = _buf.readShort();
+
+        tasks.add(new PreloadImages(self, _player));
     }
 }

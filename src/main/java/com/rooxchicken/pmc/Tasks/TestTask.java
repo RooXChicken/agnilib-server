@@ -20,17 +20,11 @@ public class TestTask extends Task
     {
         super(_plugin);
         
-        image = new Image("kita", plugin.getResource("test.png"), true, 0, 0, 1.0, 1.0);
+        image = new Image("test", "video_0", Color.WHITE, true, 0, 0, 0.8, 0.8);
         text = new Text("testtext", "This is a test!", Color.WHITE, 100, 100, 2, 2);
 
-        for(Player _player : Bukkit.getOnlinePlayers())
-        {
-            image.players.add(_player);
-            text.players.add(_player);
-        }
-
-        image.sendData(null);
-        text.sendData(null);
+        image.sendData(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
+        text.sendData(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
 
         tickThreshold = 1;
     }
@@ -38,15 +32,18 @@ public class TestTask extends Task
     @Override
     public void run()
     {
-        text.setText("Hello! " + t, null);
-        if(++t > 1000)
+        // text.setText("Hello! " + t, Bukkit.getOnlinePlayers().toArray(new Player[] {}));
+        image.name = "video_" + t;
+        image.sendData(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
+
+        if(t > 531)
             cancel = true;
     }
 
     @Override
     public void onCancel()
     {
-        text.destory(null);
-        image.destory(null);
+        image.destory(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
+        text.destory(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
     }
 }

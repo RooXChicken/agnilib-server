@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
 
-import com.google.common.io.ByteArrayDataOutput;
 import com.rooxchicken.pmc.PMC;
 import com.rooxchicken.pmc.Data.Parser;
 
@@ -18,10 +17,10 @@ import io.netty.buffer.Unpooled;
 
 public class Text extends Component
 {
-    private static final short textID = 2;
+    private static final short textID = 3;
 
-    protected String text;
-    protected Color color;
+    public String text;
+    public Color color;
 
     public Text(String _id, String _text, Color _color, double _posX, double _posY, double _scaleX, double _scaleY)
     {
@@ -31,7 +30,7 @@ public class Text extends Component
         color = _color;
     }
 
-    public void setText(String _text, @Nullable List<Player> _players)
+    public void setText(String _text, Player ... _players)
     {
         if(_text.equals(text))
             return;
@@ -40,7 +39,7 @@ public class Text extends Component
         checkAndSend(_players);
     }
 
-    public void setColor(Color _color, @Nullable List<Player> _players)
+    public void setColor(Color _color, Player ... _players)
     {
         if(_color.equals(color))
             return;
@@ -50,7 +49,7 @@ public class Text extends Component
     }
 
     @Override
-    protected void _sendData(List<Player> _players)
+    protected void _sendData(Player ... _players)
     {
         ByteBuf _buf = Unpooled.buffer();
         _buf.writeShort(textID);
@@ -66,7 +65,7 @@ public class Text extends Component
     }
 
     @Override
-    protected void _destroy(@Nullable List<Player> _players)
+    protected void _destroy(Player ... _players)
     {
         super._destroy(_players);
     }

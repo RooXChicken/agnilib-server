@@ -20,14 +20,14 @@ import net.minecraft.network.VarInt;
 
 public class Component extends Payload
 {
-    private static final short componentID = 0;
-    private static final short removeID = 1;
+    private static final short componentID = 1;
+    private static final short removeID = 2;
 
-    protected double posX = 0;
-    protected double posY = 0;
+    public double posX = 0;
+    public double posY = 0;
 
-    protected double scaleX = 1;
-    protected double scaleY = 1;
+    public double scaleX = 1;
+    public double scaleY = 1;
 
     public Component(String _id, double _posX, double _posY, double _scaleX, double _scaleY)
     {
@@ -40,7 +40,7 @@ public class Component extends Payload
         scaleY = _scaleY;
     }
 
-    public void setPosition(double _posX, double _posY, @Nullable List<Player> _players)
+    public void setPosition(double _posX, double _posY, Player ... _players)
     {
         if(_posX == posX && _posY == posY)
             return;
@@ -51,7 +51,7 @@ public class Component extends Payload
         checkAndSend(_players);
     }
 
-    public void setScale(double _scaleX, double _scaleY, @Nullable List<Player> _players)
+    public void setScale(double _scaleX, double _scaleY, Player ... _players)
     {
         if(_scaleX == scaleX && _scaleY == scaleY)
             return;
@@ -63,7 +63,7 @@ public class Component extends Payload
     }
 
     @Override
-    protected void _sendData(List<Player> _players)
+    protected void _sendData(Player ... _players)
     {
         ByteBuf _buf = Unpooled.buffer();
         _buf.writeShort(componentID);
@@ -79,7 +79,7 @@ public class Component extends Payload
     }
 
     @Override
-    protected void _destroy(@Nullable List<Player> _players)
+    protected void _destroy(Player ... _players)
     {
         ByteBuf _buf = Unpooled.buffer();
         _buf.writeShort(removeID);
