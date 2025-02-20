@@ -38,7 +38,7 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
         initializeDataConnection();
 
         tasks = new ArrayList<Task>();
-        // tasks.add(new TestTask(this));
+        tasks.add(new TestTask(this));
 
         this.getCommand("command").setExecutor(new TestCommand(this));
 

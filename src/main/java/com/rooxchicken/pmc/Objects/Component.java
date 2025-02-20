@@ -20,7 +20,8 @@ import net.minecraft.network.VarInt;
 
 public class Component extends Payload
 {
-    private static final short componentID = 1;
+    private static final short componentID = 0;
+    private static final short removeID = 1;
 
     protected double posX = 0;
     protected double posY = 0;
@@ -78,8 +79,13 @@ public class Component extends Payload
     }
 
     @Override
-    public void destroy(List<Player> _players)
+    protected void _destroy(@Nullable List<Player> _players)
     {
+        ByteBuf _buf = Unpooled.buffer();
+        _buf.writeShort(removeID);
+        Parser.writeString(id, _buf);
 
+        for(Player _player : _players)
+            PMC.sendData(_player, _buf.array());
     }
 }

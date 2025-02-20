@@ -23,8 +23,15 @@ public abstract class Payload
         id = _id;
         players = new ArrayList<Player>();
     }
+    
+    protected void checkAndSend(@Nullable List<Player> _players)
+    {
+        if(sendOnUpdate)
+            sendData(_players);
+    }
 
     // if null, it will send to all of the players in the `players` list
+    protected abstract void _sendData(@Nullable List<Player> _players);
     public void sendData(@Nullable List<Player> _players)
     {
         if(_players == null)
@@ -33,12 +40,13 @@ public abstract class Payload
             _sendData(_players);
     }
 
-    protected void checkAndSend(@Nullable List<Player> _players)
+    // if null, it will send to all of the players in the `players` list
+    protected abstract void _destroy(@Nullable List<Player> _players);
+    public void destory(@Nullable List<Player> _players)
     {
-        if(sendOnUpdate)
-            sendData(_players);
+        if(_players == null)
+            _destroy(players);
+        else
+            _destroy(_players);
     }
-
-    protected abstract void _sendData(@Nullable List<Player> _players);
-    public abstract void destroy(@Nullable List<Player> _players);
 }

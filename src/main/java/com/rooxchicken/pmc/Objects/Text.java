@@ -66,13 +66,8 @@ public class Text extends Component
     }
 
     @Override
-    public void destroy(@Nullable List<Player> _players)
+    protected void _destroy(@Nullable List<Player> _players)
     {
-        // ByteArrayDataOutput _out = PMC.generateDataOutput(id);
-
-        // if(_players == null)
-        //     _sendData(players, TEXT_DEL, _out);
-        // else
-        //     _sendData(_players, TEXT_DEL, _out);
+        super._destroy(_players);
     }
 }

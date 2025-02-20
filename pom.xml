@@ -48,7 +48,7 @@
       <resource>
         <directory>${project.basedir}/src/main/resources</directory>
         <includes>
-          <include>plugin.yml</include>
+          <include>*</include>
         </includes>
       </resource>
     </resources>
