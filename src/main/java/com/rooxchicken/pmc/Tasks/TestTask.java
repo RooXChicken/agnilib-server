@@ -20,11 +20,11 @@ public class TestTask extends Task
     {
         super(_plugin);
         
-        image = new Image("test", "video_0", Color.WHITE, true, 0, 0, 0.8, 0.8);
-        text = new Text("testtext", "This is a test!", Color.WHITE, 100, 100, 2, 2);
+        // image = new Image("test", "video_0", Color.WHITE, true, 0, 0, 0.8, 0.8);
+        // text = new Text("testtext", "This is a test!", Color.WHITE, 100, 100, 2, 2);
 
-        image.sendData(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
-        text.sendData(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
+        // image.sendData(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
+        // text.sendData(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
 
         tickThreshold = 1;
     }
@@ -32,18 +32,20 @@ public class TestTask extends Task
     @Override
     public void run()
     {
-        // text.setText("Hello! " + t, Bukkit.getOnlinePlayers().toArray(new Player[] {}));
-        image.name = "video_" + t;
-        image.sendData(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
+        // image.name = "video_" + t;
+        // image.sendData(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
 
-        if(t > 531)
+        // if(PMC.keybinding.isJustPressed("key.sneak"))
+        //     Bukkit.getLogger().info("You just toggled your perspective! Can't detect THAT one with regular spigot!");
+
+        if(t > 1000)
             cancel = true;
     }
 
     @Override
     public void onCancel()
     {
-        image.destory(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
-        text.destory(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
+        // image.destory(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
+        // text.destory(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
     }
 }

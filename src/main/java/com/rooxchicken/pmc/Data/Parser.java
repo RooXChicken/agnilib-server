@@ -17,6 +17,11 @@ public class Parser
 {
     private static int MAX_SEND_SIZE = 13240;
 
+    public static String readString(ByteBuf _buf)
+	{
+		return _buf.readCharSequence(_buf.readShort(), Charset.defaultCharset()).toString();
+	}
+
     public static void writeString(String _string, ByteBuf _buf)
     {
         _buf.writeShort(_string.trim().length());

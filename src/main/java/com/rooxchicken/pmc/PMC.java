@@ -20,7 +20,9 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.rooxchicken.pmc.Commands.TestCommand;
+import com.rooxchicken.pmc.Data.Keybinding;
 import com.rooxchicken.pmc.Data.Parser;
+import com.rooxchicken.pmc.Events.PlayerKeybindEvent;
 import com.rooxchicken.pmc.Objects.Image;
 import com.rooxchicken.pmc.Objects.Payload;
 import com.rooxchicken.pmc.Objects.Text;
@@ -35,7 +37,10 @@ import net.minecraft.network.VarInt;
 public class PMC extends JavaPlugin implements Listener, PluginMessageListener
 {
     public static PMC self;
+    public static Keybinding keybinding;
     public static ArrayList<Task> tasks;
+
+    public static final int PMC_VERSION = 2;
 
     public static final String CHANNEL = "pmc:channel";
     public static final short loginID = 0;
@@ -43,15 +48,17 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
     @Override
     public void onEnable()
     {
-        self = this;
+        PMC.self = this;
+        PMC.keybinding = new Keybinding();
+
         getServer().getPluginManager().registerEvents(this, this);
         initializeDataConnection();
 
         tasks = new ArrayList<Task>();
-        // tasks.add(new TestTask(this));
+        tasks.add(new TestTask(this));
 
-        for(int i = 1; i < 531; i++)
-            Image.preload("video_" + i, new File("frames/" + i + ".png"));
+        // for(int i = 1; i < 531; i++)
+        //     Image.preload("video_" + i, new File("frames/" + i + ".png"));
 
         this.getCommand("command").setExecutor(new TestCommand(this));
 
@@ -74,6 +81,8 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
                         tasks.remove(i--);
                     }
                 }
+
+                keybinding.tickKeys();
             }
         }, 0, 1);
 
@@ -137,8 +146,23 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
             return;
         
         ByteBuf _buf = Unpooled.copiedBuffer(_data);
+
+        int _size = _buf.readInt();
         short _status = _buf.readShort();
 
-        tasks.add(new PreloadImages(self, _player));
+        switch(_status)
+        {
+            case loginID:
+                ByteBuf _loginReponse = Unpooled.buffer();
+                VarInt.write(_loginReponse, loginID);
+                VarInt.write(_loginReponse, PMC_VERSION);
+
+                sendData(_player, _loginReponse.array());
+            break;
+
+            case (short)Keybinding.keybindID:
+                PMC.keybinding.registerKeyState(Parser.readString(_buf), _buf.readByte());
+            break;
+        }
     }
 }
