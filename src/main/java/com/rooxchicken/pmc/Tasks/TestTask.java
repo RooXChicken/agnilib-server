@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 
 import com.rooxchicken.pmc.PMC;
+import com.rooxchicken.pmc.Events.PlayerKeybindEvent;
 import com.rooxchicken.pmc.Objects.Component;
 import com.rooxchicken.pmc.Objects.Image;
 import com.rooxchicken.pmc.Objects.Text;
@@ -26,6 +28,8 @@ public class TestTask extends Task
         // image.sendData(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
         // text.sendData(Bukkit.getOnlinePlayers().toArray(new Player[] {}));
 
+        // for(Player _player : Bukkit.getO)
+
         tickThreshold = 1;
     }
 
@@ -38,8 +42,18 @@ public class TestTask extends Task
         // if(PMC.keybinding.isJustPressed("key.sneak"))
         //     Bukkit.getLogger().info("You just toggled your perspective! Can't detect THAT one with regular spigot!");
 
-        if(t > 1000)
-            cancel = true;
+        // if(t > 1000)
+        //     cancel = true;
+    }
+
+    @EventHandler
+    private void keyTest(PlayerKeybindEvent event)
+    {
+        // Bukkit.getLogger().info("CAT: " + event.getCategory() + " | " + event.getKey());
+        if(event.getState() == 1 && event.getKey().equals("the.epic.key"))
+        {
+            event.getPlayer().sendMessage("You just pressed the custom key! :D");
+        }
     }
 
     @Override

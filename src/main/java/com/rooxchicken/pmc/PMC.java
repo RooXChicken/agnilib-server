@@ -11,7 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -50,15 +52,15 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
     {
         PMC.self = this;
         PMC.keybinding = new Keybinding();
+        tasks = new ArrayList<Task>();
 
         getServer().getPluginManager().registerEvents(this, this);
         initializeDataConnection();
 
-        tasks = new ArrayList<Task>();
-        tasks.add(new TestTask(this));
+        for(Player _player : Bukkit.getOnlinePlayers())
+            initializePlayer(_player);
 
-        // for(int i = 1; i < 531; i++)
-        //     Image.preload("video_" + i, new File("frames/" + i + ".png"));
+        tasks.add(new TestTask(this));
 
         this.getCommand("command").setExecutor(new TestCommand(this));
 
@@ -101,12 +103,44 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
 
             tasks.remove(i--);
         }
+
+        for(Player _player : Bukkit.getOnlinePlayers())
+            cleanupPlayer(_player);
     }
 
     public static void initializeDataConnection()
     {
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(PMC.self, PMC.CHANNEL);
         Bukkit.getServer().getMessenger().registerIncomingPluginChannel(PMC.self, PMC.CHANNEL, PMC.self);
+    }
+
+    private void initializePlayer(Player _player)
+    {
+        ByteBuf _loginReponse = Unpooled.buffer();
+        VarInt.write(_loginReponse, loginID);
+        VarInt.write(_loginReponse, PMC_VERSION);
+
+        sendData(_player, _loginReponse.array());
+
+        keybinding.registerPlayer(_player);
+        keybinding.registerKeybind(_player, "hiiii", "the.epic.key");
+    }
+
+    @EventHandler
+    private void registerPlayer(PlayerLoginEvent event)
+    {
+        initializePlayer(event.getPlayer());
+    }
+
+    @EventHandler
+    private void unregisterPlayer(PlayerQuitEvent event)
+    {
+        cleanupPlayer(event.getPlayer());
+    }
+
+    private void cleanupPlayer(Player _player)
+    {
+        keybinding.unregisterPlayer(_player);
     }
 
     private static boolean checkPlayer(Player _player)
@@ -153,15 +187,11 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
         switch(_status)
         {
             case loginID:
-                ByteBuf _loginReponse = Unpooled.buffer();
-                VarInt.write(_loginReponse, loginID);
-                VarInt.write(_loginReponse, PMC_VERSION);
-
-                sendData(_player, _loginReponse.array());
+                initializePlayer(_player);
             break;
 
             case (short)Keybinding.keybindID:
-                PMC.keybinding.registerKeyState(Parser.readString(_buf), _buf.readByte());
+                PMC.keybinding.registerKeyState(_player, Parser.readString(_buf), Parser.readString(_buf), _buf.readByte());
             break;
         }
     }
