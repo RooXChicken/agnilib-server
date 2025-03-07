@@ -1,4 +1,4 @@
-package com.rooxchicken.pmc.Objects;
+package com.rooxchicken.agnilib.Objects;
 
 import java.nio.charset.Charset;
 import java.util.List;
@@ -9,8 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
 
-import com.rooxchicken.pmc.PMC;
-import com.rooxchicken.pmc.Data.Parser;
+import com.rooxchicken.agnilib.AgniLib;
+import com.rooxchicken.agnilib.Data.Parser;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -59,7 +59,7 @@ public class Text extends Component
         _buf.writeInt(color.asARGB());
 
         for(Player _player : _players)
-            PMC.sendData(_player, _buf.array());
+            AgniLib.sendData(_player, _buf.array());
 
         super._sendData(_players);
     }

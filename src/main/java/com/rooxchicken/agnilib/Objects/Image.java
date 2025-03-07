@@ -1,4 +1,4 @@
-package com.rooxchicken.pmc.Objects;
+package com.rooxchicken.agnilib.Objects;
 
 import java.io.File;
 import java.io.FileReader;
@@ -17,8 +17,8 @@ import org.bukkit.Color;
 import org.bukkit.entity.Player;
 
 import com.google.common.io.ByteArrayDataOutput;
-import com.rooxchicken.pmc.PMC;
-import com.rooxchicken.pmc.Data.Parser;
+import com.rooxchicken.agnilib.AgniLib;
+import com.rooxchicken.agnilib.Data.Parser;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -57,7 +57,7 @@ public class Image extends Component
         for(byte[] _packet : preloadedTextures.get(_id))
         {
             for(Player _player : _players)
-                PMC.sendData(_player, _packet);
+                AgniLib.sendData(_player, _packet);
         }
     }
 
@@ -103,7 +103,7 @@ public class Image extends Component
         _buf.writeBoolean(blend);
 
         for(Player _player : _players)
-            PMC.sendData(_player, _buf.array());
+            AgniLib.sendData(_player, _buf.array());
 
         super._sendData(_players);
     }

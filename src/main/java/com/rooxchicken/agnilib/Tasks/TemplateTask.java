@@ -1,11 +1,11 @@
-package com.rooxchicken.pmc.Tasks;
+package com.rooxchicken.agnilib.Tasks;
 
-import com.rooxchicken.pmc.PMC;
+import com.rooxchicken.agnilib.AgniLib;
 
 public class TemplateTask extends Task
 {
 
-    public TemplateTask(PMC _plugin)
+    public TemplateTask(AgniLib _plugin)
     {
         super(_plugin);
 

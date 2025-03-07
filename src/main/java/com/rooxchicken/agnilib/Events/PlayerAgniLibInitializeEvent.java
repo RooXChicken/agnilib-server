@@ -1,17 +1,17 @@
-package com.rooxchicken.pmc.Events;
+package com.rooxchicken.agnilib.Events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerPMCInitializeEvent extends Event
+public class PlayerAgniLibInitializeEvent extends Event
 {
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
     private Player player;
 
-    public PlayerPMCInitializeEvent(Player _player)
+    public PlayerAgniLibInitializeEvent(Player _player)
     {
         player = _player;
     }

@@ -1,4 +1,4 @@
-package com.rooxchicken.pmc.Data;
+package com.rooxchicken.agnilib.Data;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,8 +7,8 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.rooxchicken.pmc.PMC;
-import com.rooxchicken.pmc.Events.PlayerKeybindEvent;
+import com.rooxchicken.agnilib.AgniLib;
+import com.rooxchicken.agnilib.Events.PlayerKeybindEvent;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -99,6 +99,6 @@ public class Keybinding
         Parser.writeString(_category, _buf);
         Parser.writeString(_translation, _buf);
 
-        PMC.sendData(_player, _buf.array());
+        AgniLib.sendData(_player, _buf.array());
     }
 }

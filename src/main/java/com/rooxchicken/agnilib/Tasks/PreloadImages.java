@@ -1,4 +1,4 @@
-package com.rooxchicken.pmc.Tasks;
+package com.rooxchicken.agnilib.Tasks;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,16 +7,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
 
-import com.rooxchicken.pmc.PMC;
-import com.rooxchicken.pmc.Objects.Component;
-import com.rooxchicken.pmc.Objects.Image;
-import com.rooxchicken.pmc.Objects.Text;
+import com.rooxchicken.agnilib.AgniLib;
+import com.rooxchicken.agnilib.Objects.Component;
+import com.rooxchicken.agnilib.Objects.Image;
+import com.rooxchicken.agnilib.Objects.Text;
 
 public class PreloadImages extends Task
 {
     private Player player;
 
-    public PreloadImages(PMC _plugin, Player _player)
+    public PreloadImages(AgniLib _plugin, Player _player)
     {
         super(_plugin);
         player = _player;

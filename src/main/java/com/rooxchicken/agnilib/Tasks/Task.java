@@ -1,13 +1,13 @@
-package com.rooxchicken.pmc.Tasks;
+package com.rooxchicken.agnilib.Tasks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 
-import com.rooxchicken.pmc.PMC;
+import com.rooxchicken.agnilib.AgniLib;
 
 public abstract class Task implements Listener
 {
-    protected PMC plugin;
+    protected AgniLib plugin;
     
     protected int tickThreshold = 1;
     private int tick = 0;
@@ -15,7 +15,7 @@ public abstract class Task implements Listener
 
     public boolean cancel = false;
 
-    public Task(PMC _plugin)
+    public Task(AgniLib _plugin)
     {
         plugin = _plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);

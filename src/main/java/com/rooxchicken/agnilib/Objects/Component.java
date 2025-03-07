@@ -1,4 +1,4 @@
-package com.rooxchicken.pmc.Objects;
+package com.rooxchicken.agnilib.Objects;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.rooxchicken.pmc.PMC;
-import com.rooxchicken.pmc.Data.Parser;
+import com.rooxchicken.agnilib.AgniLib;
+import com.rooxchicken.agnilib.Data.Parser;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -78,7 +78,7 @@ public class Component extends Payload
         _buf.writeDouble(scaleY);
 
         for(Player _player : _players)
-            PMC.sendData(_player, _buf.array());
+            AgniLib.sendData(_player, _buf.array());
     }
 
     @Override
@@ -89,6 +89,6 @@ public class Component extends Payload
         Parser.writeString(id, _buf);
 
         for(Player _player : _players)
-            PMC.sendData(_player, _buf.array());
+            AgniLib.sendData(_player, _buf.array());
     }
 }

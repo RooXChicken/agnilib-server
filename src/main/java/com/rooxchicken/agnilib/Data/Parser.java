@@ -1,4 +1,4 @@
-package com.rooxchicken.pmc.Data;
+package com.rooxchicken.agnilib.Data;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.rooxchicken.pmc.PMC;
+import com.rooxchicken.agnilib.AgniLib;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

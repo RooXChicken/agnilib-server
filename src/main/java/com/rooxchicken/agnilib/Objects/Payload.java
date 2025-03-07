@@ -1,4 +1,4 @@
-package com.rooxchicken.pmc.Objects;
+package com.rooxchicken.agnilib.Objects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.google.common.io.ByteArrayDataOutput;
-import com.rooxchicken.pmc.PMC;
+import com.rooxchicken.agnilib.AgniLib;
 
 public abstract class Payload
 {

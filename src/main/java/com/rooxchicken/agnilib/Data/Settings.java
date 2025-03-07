@@ -1,4 +1,4 @@
-package com.rooxchicken.pmc.Data;
+package com.rooxchicken.agnilib.Data;
 
 import java.io.File;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import com.google.gson.JsonPrimitive;
 
 public class Settings
 {
-    public static final String SETTINGS_PATH = "pmc.cfg";
+    public static final String SETTINGS_PATH = "agnilib.cfg";
 
     public static void saveData(String _path, Object _value)
     {

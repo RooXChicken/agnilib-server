@@ -1,4 +1,4 @@
-package com.rooxchicken.pmc;
+package com.rooxchicken.agnilib;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,37 +21,37 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.rooxchicken.pmc.Commands.TestCommand;
-import com.rooxchicken.pmc.Data.Keybinding;
-import com.rooxchicken.pmc.Data.Parser;
-import com.rooxchicken.pmc.Events.PlayerKeybindEvent;
-import com.rooxchicken.pmc.Events.PlayerPMCInitializeEvent;
-import com.rooxchicken.pmc.Objects.Image;
-import com.rooxchicken.pmc.Objects.Payload;
-import com.rooxchicken.pmc.Objects.Text;
-import com.rooxchicken.pmc.Tasks.PreloadImages;
-import com.rooxchicken.pmc.Tasks.Task;
+import com.rooxchicken.agnilib.Commands.TestCommand;
+import com.rooxchicken.agnilib.Data.Keybinding;
+import com.rooxchicken.agnilib.Data.Parser;
+import com.rooxchicken.agnilib.Events.PlayerKeybindEvent;
+import com.rooxchicken.agnilib.Events.PlayerAgniLibInitializeEvent;
+import com.rooxchicken.agnilib.Objects.Image;
+import com.rooxchicken.agnilib.Objects.Payload;
+import com.rooxchicken.agnilib.Objects.Text;
+import com.rooxchicken.agnilib.Tasks.PreloadImages;
+import com.rooxchicken.agnilib.Tasks.Task;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.VarInt;
 
-public class PMC extends JavaPlugin implements Listener, PluginMessageListener
+public class AgniLib extends JavaPlugin implements Listener, PluginMessageListener
 {
-    public static PMC self;
+    public static AgniLib self;
     public static Keybinding keybinding;
     public static ArrayList<Task> tasks;
 
-    public static final int PMC_VERSION = 2;
+    public static final int AgniLib_VERSION = 2;
 
-    public static final String CHANNEL = "pmc:channel";
+    public static final String CHANNEL = "agnilib:channel";
     public static final short loginID = 0;
 
     @Override
     public void onEnable()
     {
-        PMC.self = this;
-        PMC.keybinding = new Keybinding();
+        AgniLib.self = this;
+        AgniLib.keybinding = new Keybinding();
         tasks = new ArrayList<Task>();
 
         getServer().getPluginManager().registerEvents(this, this);
@@ -106,21 +106,21 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
 
     public static void initializeDataConnection()
     {
-        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(PMC.self, PMC.CHANNEL);
-        Bukkit.getServer().getMessenger().registerIncomingPluginChannel(PMC.self, PMC.CHANNEL, PMC.self);
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(AgniLib.self, AgniLib.CHANNEL);
+        Bukkit.getServer().getMessenger().registerIncomingPluginChannel(AgniLib.self, AgniLib.CHANNEL, AgniLib.self);
     }
 
     private void initializePlayer(Player _player)
     {
         ByteBuf _loginReponse = Unpooled.buffer();
         VarInt.write(_loginReponse, loginID);
-        VarInt.write(_loginReponse, PMC_VERSION);
+        VarInt.write(_loginReponse, AgniLib_VERSION);
 
         sendData(_player, _loginReponse.array());
 
         keybinding.registerPlayer(_player);
 
-        PlayerPMCInitializeEvent _event = new PlayerPMCInitializeEvent(_player);
+        PlayerAgniLibInitializeEvent _event = new PlayerAgniLibInitializeEvent(_player);
         Bukkit.getPluginManager().callEvent(_event);
     }
 
@@ -195,7 +195,7 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
             break;
 
             case (short)Keybinding.keybindID:
-                PMC.keybinding.registerKeyState(_player, Parser.readString(_buf), Parser.readString(_buf), _buf.readByte());
+                AgniLib.keybinding.registerKeyState(_player, Parser.readString(_buf), Parser.readString(_buf), _buf.readByte());
             break;
         }
     }
