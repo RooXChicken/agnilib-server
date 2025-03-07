@@ -25,12 +25,12 @@ import com.rooxchicken.pmc.Commands.TestCommand;
 import com.rooxchicken.pmc.Data.Keybinding;
 import com.rooxchicken.pmc.Data.Parser;
 import com.rooxchicken.pmc.Events.PlayerKeybindEvent;
+import com.rooxchicken.pmc.Events.PlayerPMCInitializeEvent;
 import com.rooxchicken.pmc.Objects.Image;
 import com.rooxchicken.pmc.Objects.Payload;
 import com.rooxchicken.pmc.Objects.Text;
 import com.rooxchicken.pmc.Tasks.PreloadImages;
 import com.rooxchicken.pmc.Tasks.Task;
-import com.rooxchicken.pmc.Tasks.TestTask;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -59,10 +59,6 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
 
         for(Player _player : Bukkit.getOnlinePlayers())
             initializePlayer(_player);
-
-        tasks.add(new TestTask(this));
-
-        this.getCommand("command").setExecutor(new TestCommand(this));
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
         {
@@ -123,7 +119,15 @@ public class PMC extends JavaPlugin implements Listener, PluginMessageListener
         sendData(_player, _loginReponse.array());
 
         keybinding.registerPlayer(_player);
-        keybinding.registerKeybind(_player, "hiiii", "the.epic.key");
+
+        PlayerPMCInitializeEvent _event = new PlayerPMCInitializeEvent(_player);
+        Bukkit.getPluginManager().callEvent(_event);
+    }
+
+    public void reninitializePlayers()
+    {
+        for(Player _player : Bukkit.getOnlinePlayers())
+            initializePlayer(_player);
     }
 
     @EventHandler

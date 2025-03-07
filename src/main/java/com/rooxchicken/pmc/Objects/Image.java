@@ -36,9 +36,9 @@ public class Image extends Component
     public boolean blend = false;
     public Color color = Color.WHITE;
 
-    public Image(String _id, String _name, Color _color, boolean _blend, double _posX, double _posY, double _scaleX, double _scaleY)
+    public Image(String _id, String _name, Color _color, boolean _blend, boolean _positionType, double _posX, double _posY, double _scaleX, double _scaleY)
     {
-        super(_id, _posX, _posY, _scaleX, _scaleY);
+        super(_id, _positionType, _posX, _posY, _scaleX, _scaleY);
 
         name = _name;
 
@@ -59,6 +59,11 @@ public class Image extends Component
             for(Player _player : _players)
                 PMC.sendData(_player, _packet);
         }
+    }
+
+    public static void purgeCache()
+    {
+        preloadedTextures.clear();
     }
 
     private static void _preloadTexture(String _id, File _file)
@@ -101,6 +106,33 @@ public class Image extends Component
             PMC.sendData(_player, _buf.array());
 
         super._sendData(_players);
+    }
+
+    public void setName(String _name, Player ... _players)
+    {
+        if(name.equals(_name))
+            return;
+            
+        name = _name;
+        checkAndSend(_players);
+    }
+
+    public void setBlend(boolean _blend, Player ... _players)
+    {
+        if(blend == _blend)
+            return;
+            
+        blend = _blend;
+        checkAndSend(_players);
+    }
+
+    public void setColor(Color _color, Player ... _players)
+    {
+        if(color.equals(_color))
+            return;
+            
+        color = _color;
+        checkAndSend(_players);
     }
 
     @Override

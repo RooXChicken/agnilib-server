@@ -12,7 +12,13 @@ import com.rooxchicken.pmc.Events.PlayerKeybindEvent;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.world.level.chunk.PalettedContainerRO.Unpacker;
+
+enum KeyState
+{
+    JUST_PRESSED,
+    HELD,
+    JUST_RELEASED
+}
 
 public class Keybinding
 {

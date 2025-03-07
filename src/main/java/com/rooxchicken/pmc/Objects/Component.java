@@ -23,16 +23,18 @@ public class Component extends Payload
     private static final short componentID = 1;
     private static final short removeID = 2;
 
+    public boolean positionType = false;
     public double posX = 0;
     public double posY = 0;
 
     public double scaleX = 1;
     public double scaleY = 1;
 
-    public Component(String _id, double _posX, double _posY, double _scaleX, double _scaleY)
+    public Component(String _id, boolean _positionType, double _posX, double _posY, double _scaleX, double _scaleY)
     {
         super(_id);
 
+        positionType = _positionType;
         posX = _posX;
         posY = _posY;
 
@@ -69,6 +71,7 @@ public class Component extends Payload
         _buf.writeShort(componentID);
 
         Parser.writeString(id, _buf);
+        _buf.writeBoolean(positionType);
         _buf.writeDouble(posX);
         _buf.writeDouble(posY);
         _buf.writeDouble(scaleX);

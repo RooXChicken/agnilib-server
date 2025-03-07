@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 
 import com.rooxchicken.pmc.PMC;
 import com.rooxchicken.pmc.Objects.Image;
-import com.rooxchicken.pmc.Tasks.TestTask;
 
 public class TestCommand implements CommandExecutor
 {
@@ -22,8 +21,8 @@ public class TestCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        Player _player = Bukkit.getPlayer(sender.getName());
-        PMC.tasks.add(new TestTask(plugin));
+        // Player _player = Bukkit.getPlayer(sender.getName());
+        // PMC.tasks.add(new TestTask(plugin));
         // Image.preload("test_img", plugin.getResource("test.png"), _player);
         // if(sender.isOp())
         // {

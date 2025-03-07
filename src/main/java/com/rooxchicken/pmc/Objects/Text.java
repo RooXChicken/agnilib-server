@@ -22,9 +22,9 @@ public class Text extends Component
     public String text;
     public Color color;
 
-    public Text(String _id, String _text, Color _color, double _posX, double _posY, double _scaleX, double _scaleY)
+    public Text(String _id, String _text, Color _color, boolean _positionType, double _posX, double _posY, double _scaleX, double _scaleY)
     {
-        super(_id, _posX, _posY, _scaleX, _scaleY);
+        super(_id, _positionType, _posX, _posY, _scaleX, _scaleY);
 
         text = _text;
         color = _color;
