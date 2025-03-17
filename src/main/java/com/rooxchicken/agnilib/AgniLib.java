@@ -32,6 +32,7 @@ import com.rooxchicken.agnilib.Data.Parser;
 import com.rooxchicken.agnilib.Data.PlayerModification;
 import com.rooxchicken.agnilib.Data.Target;
 import com.rooxchicken.agnilib.Events.PlayerKeybindEvent;
+import com.rooxchicken.agnilib.Events.PlayerTargetEvent;
 import com.rooxchicken.agnilib.Events.PlayerAgniLibInitializeEvent;
 import com.rooxchicken.agnilib.Objects.Image;
 import com.rooxchicken.agnilib.Objects.Payload;
@@ -198,7 +199,14 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
                         else
                             _block = new Location(_player.getWorld(), _hitPos.getX(), _hitPos.getY(), _hitPos.getZ()).getBlock();
                         
-                        PlayerModification.playerTargetMap.put(_player, new Target(_block, _entity, _hitPos));
+                        Target _target = new Target(_block, _entity, _hitPos);
+                        PlayerTargetEvent _event = new PlayerTargetEvent(_player, _target);
+                        Bukkit.getPluginManager().callEvent(_event);
+
+                        if(_event.isCancelled())
+                            break;
+
+                        PlayerModification.playerTargetMap.put(_player, _event.getTarget());
                     break;
                 }
             break;
