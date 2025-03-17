@@ -2,11 +2,15 @@ package com.rooxchicken.agnilib;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -26,6 +30,7 @@ import com.rooxchicken.agnilib.Commands.TestCommand;
 import com.rooxchicken.agnilib.Data.Keybinding;
 import com.rooxchicken.agnilib.Data.Parser;
 import com.rooxchicken.agnilib.Data.PlayerModification;
+import com.rooxchicken.agnilib.Data.Target;
 import com.rooxchicken.agnilib.Events.PlayerKeybindEvent;
 import com.rooxchicken.agnilib.Events.PlayerAgniLibInitializeEvent;
 import com.rooxchicken.agnilib.Objects.Image;
@@ -166,8 +171,36 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
                 initializePlayer(_player);
             break;
 
-            case (short)Keybinding.keybindID:
+            case Keybinding.keybindID:
                 AgniLib.keybinding.registerKeyState(_player, Parser.readString(_buf), Parser.readString(_buf), _buf.readByte());
+            break;
+
+            case PlayerModification.playerModification:
+                short _modType = _buf.readShort();
+                switch(_modType)
+                {
+                    case PlayerModification.playerGetTarget:
+                        boolean _hit = _buf.readBoolean();
+                        if(!_hit)
+                        {
+                            PlayerModification.playerTargetMap.put(_player, null);
+                            break;
+                        }
+
+                        Vector _hitPos = new Vector(_buf.readDouble(), _buf.readDouble(), _buf.readDouble());
+                        
+                        Entity _entity = null;
+                        Block _block = null;
+                        String _uuid = Parser.readString(_buf);
+
+                        if(!_uuid.equals(""))
+                            _entity = Bukkit.getEntity(UUID.fromString(_uuid));
+                        else
+                            _block = new Location(_player.getWorld(), _hitPos.getX(), _hitPos.getY(), _hitPos.getZ()).getBlock();
+                        
+                        PlayerModification.playerTargetMap.put(_player, new Target(_block, _entity, _hitPos));
+                    break;
+                }
             break;
         }
     }

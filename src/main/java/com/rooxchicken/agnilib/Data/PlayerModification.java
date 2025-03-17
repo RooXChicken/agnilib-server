@@ -18,15 +18,15 @@ public class PlayerModification
     public static final short playerSetVelocity = 0;
     public static final short playerGetVelocity = 1;
 
+    public static final short playerGetTarget = 3;
+
     public static HashMap<Player, Vector> playerVelocityMap = new HashMap<Player, Vector>();
+    public static HashMap<Player, Target> playerTargetMap = new HashMap<Player, Target>();
     
     public static void setPlayerVelocity(Vector _velocity, Player ... _players)
     {
         for(Player _player : _players)
-        {
             playerVelocityMap.put(_player, _velocity);
-            // Bukkit.getLogger().info("Setting velocity: " + _velocity.getX() + " | " + _velocity.getY() + " | " + _velocity.getZ() + " for " + _player.getName());
-        }
     }
 
     public static Vector getPlayerVelocity(Player _player)
@@ -48,9 +48,12 @@ public class PlayerModification
             _buf.writeDouble(_velocity.getY());
             _buf.writeDouble(_velocity.getZ());
 
-            // Bukkit.getLogger().info("SENDING velocity: " + _velocity.getX() + " | " + _velocity.getY() + " | " + _velocity.getZ() + " for " + _player.getName());
-
             AgniLib.sendData(_player, _buf.array());
         }
+    }
+
+    public static Target getPlayerTarget(Player _player)
+    {
+        return playerTargetMap.containsKey(_player) ? playerTargetMap.get(_player).clone() : null;
     }
 }
