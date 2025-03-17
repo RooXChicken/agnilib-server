@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.bukkit.util.Vector;
 import org.bukkit.util.io.BukkitObjectInputStream;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -24,13 +25,12 @@ import com.google.common.io.ByteStreams;
 import com.rooxchicken.agnilib.Commands.TestCommand;
 import com.rooxchicken.agnilib.Data.Keybinding;
 import com.rooxchicken.agnilib.Data.Parser;
+import com.rooxchicken.agnilib.Data.PlayerModification;
 import com.rooxchicken.agnilib.Events.PlayerKeybindEvent;
 import com.rooxchicken.agnilib.Events.PlayerAgniLibInitializeEvent;
 import com.rooxchicken.agnilib.Objects.Image;
 import com.rooxchicken.agnilib.Objects.Payload;
 import com.rooxchicken.agnilib.Objects.Text;
-import com.rooxchicken.agnilib.Tasks.PreloadImages;
-import com.rooxchicken.agnilib.Tasks.Task;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -40,7 +40,6 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
 {
     public static AgniLib self;
     public static Keybinding keybinding;
-    public static ArrayList<Task> tasks;
 
     public static final int AgniLib_VERSION = 2;
 
@@ -52,7 +51,6 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
     {
         AgniLib.self = this;
         AgniLib.keybinding = new Keybinding();
-        tasks = new ArrayList<Task>();
 
         getServer().getPluginManager().registerEvents(this, this);
         initializeDataConnection();
@@ -64,22 +62,6 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
         {
             public void run()
             {
-                for(int i = 0; i < tasks.size(); i++)
-                {
-                    Task _task = tasks.get(i);
-
-                    if(!_task.cancel)
-                        _task.tick();
-
-                    if(_task.cancel)
-                    {
-                        _task.onCancel();
-                        
-                        HandlerList.unregisterAll(_task);
-                        tasks.remove(i--);
-                    }
-                }
-
                 keybinding.tickKeys();
             }
         }, 0, 1);
@@ -90,16 +72,6 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
     @Override
     public void onDisable()
     {
-        for(int i = 0; i < tasks.size(); i++)
-        {
-            Task _task = tasks.get(i);
-            
-            _task.onCancel();
-            HandlerList.unregisterAll(_task);
-
-            tasks.remove(i--);
-        }
-
         for(Player _player : Bukkit.getOnlinePlayers())
             cleanupPlayer(_player);
     }
@@ -131,7 +103,7 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
     }
 
     @EventHandler
-    private void registerPlayer(PlayerLoginEvent event)
+    private void registerPlayer(PlayerJoinEvent event)
     {
         initializePlayer(event.getPlayer());
     }
