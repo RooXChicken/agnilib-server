@@ -26,7 +26,6 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.rooxchicken.agnilib.Commands.TestCommand;
 import com.rooxchicken.agnilib.Data.KeyState;
 import com.rooxchicken.agnilib.Data.Keybinding;
 import com.rooxchicken.agnilib.Data.Parser;
@@ -43,8 +42,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.VarInt;
 
-public class AgniLib extends JavaPlugin implements Listener, PluginMessageListener
-{
+public class AgniLib extends JavaPlugin implements Listener, PluginMessageListener {
     public static AgniLib self;
     public static Keybinding keybinding;
 
@@ -54,8 +52,7 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
     public static final short loginID = 0;
 
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         AgniLib.self = this;
         AgniLib.keybinding = new Keybinding();
 
@@ -65,10 +62,8 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
         for(Player _player : Bukkit.getOnlinePlayers())
             initializePlayer(_player);
 
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
-        {
-            public void run()
-            {
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+            public void run() {
                 keybinding.tickKeys();
             }
         }, 0, 1);
@@ -77,20 +72,17 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         for(Player _player : Bukkit.getOnlinePlayers())
             cleanupPlayer(_player);
     }
 
-    public static void initializeDataConnection()
-    {
+    public static void initializeDataConnection() {
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(AgniLib.self, AgniLib.CHANNEL);
         Bukkit.getServer().getMessenger().registerIncomingPluginChannel(AgniLib.self, AgniLib.CHANNEL, AgniLib.self);
     }
 
-    private void initializePlayer(Player _player)
-    {
+    private void initializePlayer(Player _player) {
         ByteBuf _loginReponse = Unpooled.buffer();
         VarInt.write(_loginReponse, loginID);
         VarInt.write(_loginReponse, AgniLib_VERSION);
@@ -103,33 +95,27 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
         Bukkit.getPluginManager().callEvent(_event);
     }
 
-    public void reninitializePlayers()
-    {
+    public void reninitializePlayers() {
         for(Player _player : Bukkit.getOnlinePlayers())
             initializePlayer(_player);
     }
 
     @EventHandler
-    private void registerPlayer(PlayerJoinEvent event)
-    {
+    private void registerPlayer(PlayerJoinEvent event) {
         initializePlayer(event.getPlayer());
     }
 
     @EventHandler
-    private void unregisterPlayer(PlayerQuitEvent event)
-    {
+    private void unregisterPlayer(PlayerQuitEvent event) {
         cleanupPlayer(event.getPlayer());
     }
 
-    private void cleanupPlayer(Player _player)
-    {
+    private void cleanupPlayer(Player _player) {
         keybinding.unregisterPlayer(_player);
     }
 
-    private static boolean checkPlayer(Player _player)
-    {
-        if(_player == null || !_player.isValid())
-        {
+    private static boolean checkPlayer(Player _player) {
+        if(_player == null || !_player.isValid()) {
             Bukkit.getLogger().warning("Player is not valid or null!");
             return false;
         }
@@ -137,8 +123,7 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
         return true;
     }
 
-    public static void sendData(Player _player, byte[] _data)
-    {
+    public static void sendData(Player _player, byte[] _data) {
         if(!checkPlayer(_player))
             return;
         
@@ -157,8 +142,7 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
     }
 
     @Override
-    public void onPluginMessageReceived(String _channel, Player _player, byte[] _data)
-    {
+    public void onPluginMessageReceived(String _channel, Player _player, byte[] _data) {
         if(!_channel.equals(CHANNEL))
             return;
         
@@ -167,8 +151,7 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
         int _size = _buf.readInt();
         short _status = _buf.readShort();
 
-        switch(_status)
-        {
+        switch(_status) {
             case loginID:
                 initializePlayer(_player);
             break;
@@ -184,8 +167,7 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
                 {
                     case PlayerModification.playerGetTarget:
                         boolean _hit = _buf.readBoolean();
-                        if(!_hit)
-                        {
+                        if(!_hit) {
                             PlayerModification.playerTargetMap.put(_player, null);
                             break;
                         }

@@ -8,8 +8,7 @@ import org.bukkit.event.HandlerList;
 import com.rooxchicken.agnilib.Data.KeyState;
 import com.rooxchicken.agnilib.Data.Keybinding;
 
-public class PlayerKeybindEvent extends Event implements Cancellable
-{
+public class PlayerKeybindEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
     private Player player;
@@ -20,8 +19,7 @@ public class PlayerKeybindEvent extends Event implements Cancellable
 
     private boolean isCancelled;
 
-    public PlayerKeybindEvent(Player _player, String _category, String _key, KeyState _state)
-    {
+    public PlayerKeybindEvent(Player _player, String _category, String _key, KeyState _state) {
         player = _player;
         category = _category;
         key = _key;
@@ -30,50 +28,41 @@ public class PlayerKeybindEvent extends Event implements Cancellable
     }
     
 	@Override
-	public boolean isCancelled()
-    {
+	public boolean isCancelled() {
         return isCancelled;
 	}
 
 	@Override
-	public void setCancelled(boolean _cancel)
-    {
+	public void setCancelled(boolean _cancel) {
         isCancelled = _cancel;
 	}
 
 	@Override
-	public HandlerList getHandlers()
-    {
+	public HandlerList getHandlers() {
         return HANDLERS_LIST;
 	}
     
-    public static HandlerList getHandlerList()
-    {
+    public static HandlerList getHandlerList() {
         return HANDLERS_LIST;
     }
 
-    public String getKey()
-    {
+    public String getKey() {
         return key;
     }
 
-    public KeyState getState()
-    {
+    public KeyState getState() {
         return state;
     }
 
-    public void setState(KeyState _state)
-    {
+    public void setState(KeyState _state) {
         state = _state;
     }
 
-    public Player getPlayer()
-    {
+    public Player getPlayer() {
         return player;
     }
 
-    public String getCategory()
-    {
+    public String getCategory() {
         return category;
     }
 }

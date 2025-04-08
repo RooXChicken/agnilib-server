@@ -15,23 +15,20 @@ import com.rooxchicken.agnilib.Data.Parser;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-public class Text extends Component
-{
+public class Text extends Component {
     private static final short textID = 3;
 
     public String text;
     public Color color;
 
-    public Text(String _id, String _text, Color _color, boolean _positionType, double _posX, double _posY, double _scaleX, double _scaleY)
-    {
+    public Text(String _id, String _text, Color _color, boolean _positionType, double _posX, double _posY, double _scaleX, double _scaleY) {
         super(_id, _positionType, _posX, _posY, _scaleX, _scaleY);
 
         text = _text;
         color = _color;
     }
 
-    public void setText(String _text, Player ... _players)
-    {
+    public void setText(String _text, Player ... _players) {
         if(_text.equals(text))
             return;
 
@@ -39,8 +36,7 @@ public class Text extends Component
         checkAndSend(_players);
     }
 
-    public void setColor(Color _color, Player ... _players)
-    {
+    public void setColor(Color _color, Player ... _players) {
         if(_color.equals(color))
             return;
 
@@ -49,8 +45,7 @@ public class Text extends Component
     }
 
     @Override
-    protected void _sendData(Player ... _players)
-    {
+    protected void _sendData(Player ... _players) {
         ByteBuf _buf = Unpooled.buffer();
         _buf.writeShort(textID);
 
@@ -65,8 +60,7 @@ public class Text extends Component
     }
 
     @Override
-    protected void _destroy(Player ... _players)
-    {
+    protected void _destroy(Player ... _players) {
         super._destroy(_players);
     }
 }

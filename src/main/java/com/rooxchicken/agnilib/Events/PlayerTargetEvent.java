@@ -7,8 +7,7 @@ import org.bukkit.event.HandlerList;
 
 import com.rooxchicken.agnilib.Data.Target;
 
-public class PlayerTargetEvent extends Event
-{
+public class PlayerTargetEvent extends Event {
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
     private Player player;
@@ -16,45 +15,37 @@ public class PlayerTargetEvent extends Event
 
     private boolean isCancelled = false;
 
-    public PlayerTargetEvent(Player _player, Target _target)
-    {
+    public PlayerTargetEvent(Player _player, Target _target) {
         player = _player;
         target = _target;
     }
 
 	@Override
-	public HandlerList getHandlers()
-    {
+	public HandlerList getHandlers() {
         return HANDLERS_LIST;
 	}
     
-    public static HandlerList getHandlerList()
-    {
+    public static HandlerList getHandlerList() {
         return HANDLERS_LIST;
     }
 
-    public Player getPlayer()
-    {
+    public Player getPlayer() {
         return player;
     }
 
-    public Target getTarget()
-    {
+    public Target getTarget() {
         return target;
     }
 
-    public void setTarget(Target _target)
-    {
+    public void setTarget(Target _target) {
         target = _target;
     }
 
-    public boolean isCancelled()
-    {
+    public boolean isCancelled() {
         return isCancelled;
     }
 
-    public void setCancelled(boolean _cancelled)
-    {
+    public void setCancelled(boolean _cancelled) {
         isCancelled = _cancelled;
     }
 }

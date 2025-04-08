@@ -13,8 +13,7 @@ import com.rooxchicken.agnilib.Events.PlayerKeybindEvent;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-public class Keybinding
-{
+public class Keybinding {
     public static final short keybindID = 1;
     public static final short createKeybindID = 7;
 
@@ -22,45 +21,38 @@ public class Keybinding
     private HashMap<Player, HashSet<String>> heldKeys = new HashMap<Player, HashSet<String>>();
     private HashMap<Player, HashSet<String>> justReleasedKeys = new HashMap<Player, HashSet<String>>();
 
-    public void registerPlayer(Player _player)
-    {
+    public void registerPlayer(Player _player) {
         justPressedKeys.put(_player, new HashSet<String>());
         heldKeys.put(_player, new HashSet<String>());
         justReleasedKeys.put(_player, new HashSet<String>());
     }
 
-    public void unregisterPlayer(Player _player)
-    {
+    public void unregisterPlayer(Player _player) {
         justPressedKeys.remove(_player);
         heldKeys.remove(_player);
         justReleasedKeys.remove(_player);
     }
 
-    public boolean isJustPressed(Player _player, String _key)
-    {
+    public boolean isJustPressed(Player _player, String _key) {
         return justPressedKeys.get(_player).contains(_key);
     }
     
-    public boolean isPressed(Player _player, String _key)
-    {
+    public boolean isPressed(Player _player, String _key) {
         return justPressedKeys.get(_player).contains(_key) || heldKeys.get(_player).contains(_key);
     }
 
-    public boolean isJustReleased(Player _player, String _key)
-    {
+    public boolean isJustReleased(Player _player, String _key) {
         return justReleasedKeys.get(_player).contains(_key);
     }
 
-    public void registerKeyState(Player _player, String _category, String _key, KeyState _state)
-    {
+    public void registerKeyState(Player _player, String _category, String _key, KeyState _state) {
         PlayerKeybindEvent _event = new PlayerKeybindEvent(_player, _category, _key, _state);
         Bukkit.getPluginManager().callEvent(_event);
 
         if(_event.isCancelled())
             return;
 
-        switch(_event.getState())
-        {
+        switch(_event.getState()) {
             case KeyState.JUST_PRESSED:
                 justPressedKeys.get(_player).add(_key);
                 heldKeys.get(_player).add(_key);
@@ -78,8 +70,7 @@ public class Keybinding
         }
     }
 
-    public void tickKeys()
-    {
+    public void tickKeys() {
         for(Entry<Player, HashSet<String>> _entry : justPressedKeys.entrySet())
             _entry.getValue().clear();
 
@@ -87,8 +78,7 @@ public class Keybinding
             _entry.getValue().clear();
     }
 
-    public void registerKeybind(Player _player, String _category, String _translation)
-    {
+    public void registerKeybind(Player _player, String _category, String _translation) {
         ByteBuf _buf = Unpooled.buffer();
         _buf.writeShort(createKeybindID);
 

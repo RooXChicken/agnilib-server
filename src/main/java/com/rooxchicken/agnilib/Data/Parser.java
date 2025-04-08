@@ -13,26 +13,21 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.VarInt;
 
-public class Parser
-{
+public class Parser {
     private static int MAX_SEND_SIZE = 13240;
 
-    public static String readString(ByteBuf _buf)
-	{
+    public static String readString(ByteBuf _buf) {
 		return _buf.readCharSequence(_buf.readShort(), Charset.defaultCharset()).toString();
 	}
 
-    public static void writeString(String _string, ByteBuf _buf)
-    {
+    public static void writeString(String _string, ByteBuf _buf) {
         _buf.writeShort(_string.trim().length());
         _buf.writeCharSequence(_string, Charset.defaultCharset());
     }
 
-    public static List<byte[]> writeLargeArray(byte[] _data, String _id, short _dataID)
-    {
+    public static List<byte[]> writeLargeArray(byte[] _data, String _id, short _dataID) {
         List<byte[]> data = new ArrayList<byte[]>();
-        for(int i = 0; i <= _data.length/MAX_SEND_SIZE; i++)
-        {
+        for(int i = 0; i <= _data.length/MAX_SEND_SIZE; i++) {
             ByteBuf _buf = Unpooled.buffer();
             _buf.writeShort(_dataID);
             Parser.writeString(_id, _buf);

@@ -23,8 +23,7 @@ import com.rooxchicken.agnilib.Data.Parser;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-public class Image extends Component
-{
+public class Image extends Component {
     private static HashMap<String, List<byte[]>> preloadedTextures = new HashMap<String, List<byte[]>>();
     private static final short imageID = 4;
 
@@ -36,8 +35,7 @@ public class Image extends Component
     public boolean blend = false;
     public Color color = Color.WHITE;
 
-    public Image(String _id, String _name, Color _color, boolean _blend, boolean _positionType, double _posX, double _posY, double _scaleX, double _scaleY)
-    {
+    public Image(String _id, String _name, Color _color, boolean _blend, boolean _positionType, double _posX, double _posY, double _scaleX, double _scaleY) {
         super(_id, _positionType, _posX, _posY, _scaleX, _scaleY);
 
         name = _name;
@@ -46,30 +44,24 @@ public class Image extends Component
         blend = _blend;
     }
 
-    public static void preload(String _id, File _stream, Player ... _players)
-    {
+    public static void preload(String _id, File _stream, Player ... _players) {
         if(!preloadedTextures.containsKey(_id))
             _preloadTexture(_id, _stream);
         
         if(_players == null)
             return;
             
-        for(byte[] _packet : preloadedTextures.get(_id))
-        {
+        for(byte[] _packet : preloadedTextures.get(_id)) {
             for(Player _player : _players)
                 AgniLib.sendData(_player, _packet);
-        }
-    }
+        } }
 
-    public static void purgeCache()
-    {
+    public static void purgeCache() {
         preloadedTextures.clear();
     }
 
-    private static void _preloadTexture(String _id, File _file)
-    {
-        try
-        {
+    private static void _preloadTexture(String _id, File _file) {
+        try {
             byte[] _data = Files.readAllBytes(_file.toPath());
             ArrayList<byte[]> _packets = (ArrayList<byte[]>)Parser.writeLargeArray(_data, _id, preloadID);
 
@@ -81,15 +73,13 @@ public class Image extends Component
 
             preloadedTextures.put(_id, _packets);
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             Bukkit.getLogger().info("Failed to open image with id: " + _id + ". " + e);
         }
     }
 
     @Override
-    protected void _sendData(Player ... _players)
-    {
+    protected void _sendData(Player ... _players) {
         ByteBuf _buf = Unpooled.buffer();
         _buf.writeShort(imageID);
         Parser.writeString(id, _buf);
@@ -108,8 +98,7 @@ public class Image extends Component
         super._sendData(_players);
     }
 
-    public void setName(String _name, Player ... _players)
-    {
+    public void setName(String _name, Player ... _players) {
         if(name.equals(_name))
             return;
             
@@ -117,8 +106,7 @@ public class Image extends Component
         checkAndSend(_players);
     }
 
-    public void setBlend(boolean _blend, Player ... _players)
-    {
+    public void setBlend(boolean _blend, Player ... _players) {
         if(blend == _blend)
             return;
             
@@ -126,8 +114,7 @@ public class Image extends Component
         checkAndSend(_players);
     }
 
-    public void setColor(Color _color, Player ... _players)
-    {
+    public void setColor(Color _color, Player ... _players) {
         if(color.equals(_color))
             return;
             
@@ -136,8 +123,7 @@ public class Image extends Component
     }
 
     @Override
-    protected void _destroy(Player ... _players)
-    {
+    protected void _destroy(Player ... _players) {
         super._destroy(_players);
     }
 }
