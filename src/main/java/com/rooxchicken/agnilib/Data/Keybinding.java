@@ -13,13 +13,6 @@ import com.rooxchicken.agnilib.Events.PlayerKeybindEvent;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-enum KeyState
-{
-    JUST_PRESSED,
-    HELD,
-    JUST_RELEASED
-}
-
 public class Keybinding
 {
     public static final short keybindID = 1;
@@ -58,7 +51,7 @@ public class Keybinding
         return justReleasedKeys.get(_player).contains(_key);
     }
 
-    public void registerKeyState(Player _player, String _category, String _key, byte _state)
+    public void registerKeyState(Player _player, String _category, String _key, KeyState _state)
     {
         PlayerKeybindEvent _event = new PlayerKeybindEvent(_player, _category, _key, _state);
         Bukkit.getPluginManager().callEvent(_event);
@@ -68,17 +61,20 @@ public class Keybinding
 
         switch(_event.getState())
         {
-            case 1:
+            case KeyState.JUST_PRESSED:
                 justPressedKeys.get(_player).add(_key);
                 heldKeys.get(_player).add(_key);
             break;
-            case 2:
+            case KeyState.JUST_RELEASED:
                 if(justPressedKeys.get(_player).contains(_key))
                     justPressedKeys.get(_player).add(_key);
 
                 heldKeys.get(_player).remove(_key);
                 justReleasedKeys.get(_player).add(_key);
             break;
+            
+            default:
+                break;
         }
     }
 

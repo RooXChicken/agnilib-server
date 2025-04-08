@@ -27,6 +27,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.rooxchicken.agnilib.Commands.TestCommand;
+import com.rooxchicken.agnilib.Data.KeyState;
 import com.rooxchicken.agnilib.Data.Keybinding;
 import com.rooxchicken.agnilib.Data.Parser;
 import com.rooxchicken.agnilib.Data.PlayerModification;
@@ -173,7 +174,8 @@ public class AgniLib extends JavaPlugin implements Listener, PluginMessageListen
             break;
 
             case Keybinding.keybindID:
-                AgniLib.keybinding.registerKeyState(_player, Parser.readString(_buf), Parser.readString(_buf), _buf.readByte());
+                byte _state = _buf.readByte();
+                AgniLib.keybinding.registerKeyState(_player, Parser.readString(_buf), Parser.readString(_buf), (_state == 1 ? KeyState.JUST_PRESSED : KeyState.JUST_RELEASED));
             break;
 
             case PlayerModification.playerModification:

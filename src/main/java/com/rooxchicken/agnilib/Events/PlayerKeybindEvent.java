@@ -5,6 +5,9 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import com.rooxchicken.agnilib.Data.KeyState;
+import com.rooxchicken.agnilib.Data.Keybinding;
+
 public class PlayerKeybindEvent extends Event implements Cancellable
 {
     private static final HandlerList HANDLERS_LIST = new HandlerList();
@@ -13,11 +16,11 @@ public class PlayerKeybindEvent extends Event implements Cancellable
     private String category;
     private String key;
 
-    private byte state;
+    private KeyState state;
 
     private boolean isCancelled;
 
-    public PlayerKeybindEvent(Player _player, String _category, String _key, byte _state)
+    public PlayerKeybindEvent(Player _player, String _category, String _key, KeyState _state)
     {
         player = _player;
         category = _category;
@@ -54,12 +57,12 @@ public class PlayerKeybindEvent extends Event implements Cancellable
         return key;
     }
 
-    public byte getState()
+    public KeyState getState()
     {
         return state;
     }
 
-    public void setState(byte _state)
+    public void setState(KeyState _state)
     {
         state = _state;
     }
